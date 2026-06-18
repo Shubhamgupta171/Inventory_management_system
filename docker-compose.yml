@@ -1,0 +1,65 @@
+# =========================================================================== #
+# Inventory & Order Management System — full local stack
+#
+#   docker compose up --build
+#
+#   Frontend  ->  http://localhost:3000
+#   Backend   ->  http://localhost:8000  (Swagger UI at /docs)
+#   Postgres  ->  localhost:5432
+#
+# Credentials and config come from the root .env file (copy .env.example).
+# Nothing is hard-coded in this file.
+# =========================================================================== #
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: ioms_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+    container_name: ioms_backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      CORS_ORIGINS: ${CORS_ORIGINS:-*}
+      LOW_STOCK_THRESHOLD: ${LOW_STOCK_THRESHOLD:-10}
+      SEED_DATA: ${SEED_DATA:-true}
+      ENVIRONMENT: ${ENVIRONMENT:-development}
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        # Baked into the static build — must be reachable from the BROWSER.
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:8000}
+    container_name: ioms_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "${FRONTEND_PORT:-3000}:80"
+
+volumes:
+  pgdata:
+    driver: local
