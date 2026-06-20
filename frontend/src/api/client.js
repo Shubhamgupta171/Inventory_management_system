@@ -1,8 +1,8 @@
 import axios from "axios";
 
 // The backend base URL is injected at build time via Vite env vars.
-// Falls back to localhost for local `npm run dev`.
-const baseURL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+// Falls back to "/api" which is proxied locally and resolved relatively on Vercel.
+const baseURL = import.meta.env.VITE_API_URL || "/api";
 
 const api = axios.create({
   baseURL,

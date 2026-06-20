@@ -29,7 +29,7 @@ ps: ## Show running services
 
 test: ## Run backend tests inside a disposable container
 	docker run --rm -v $(PWD)/backend:/app -w /app python:3.12-slim \
-	  sh -c "pip install -q -r requirements.txt && pytest"
+	  sh -c "pip install -q -r requirements.txt && python -m pytest"
 
 seed-reset: ## Wipe the database volume and restart (re-seeds sample data)
 	$(COMPOSE) down -v

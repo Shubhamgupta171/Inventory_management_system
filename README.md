@@ -243,11 +243,11 @@ This repo includes a [`render.yaml`](./render.yaml) Blueprint.
 
 ```bash
 # Build & tag
-docker build -t <your-dockerhub-user>/ioms-backend:latest ./backend
+docker build -t shubhamdockerlegend/ioms-backend:latest ./backend
 
 # Login & push
 docker login
-docker push <your-dockerhub-user>/ioms-backend:latest
+docker push shubhamdockerlegend/ioms-backend:latest
 ```
 
 ---

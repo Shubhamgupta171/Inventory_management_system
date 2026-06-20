@@ -17,12 +17,24 @@ logger = logging.getLogger("uvicorn.error")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Wait for Postgres, create tables, optionally seed.
-    wait_for_db()
-    Base.metadata.create_all(bind=engine)
-    if settings.seed_data:
-        from .seed import seed_if_empty
+    # On Vercel, avoid a long retry loop that can cause function timeouts.
+    import os
+    if os.environ.get("VERCEL") == "1":
+        try:
+            Base.metadata.create_all(bind=engine)
+            if settings.seed_data:
+                from .seed import seed_if_empty
 
-        seed_if_empty()
+                seed_if_empty()
+        except Exception as e:
+            logger.error("Failed to initialize database during Vercel lifespan: %s", e)
+    else:
+        wait_for_db()
+        Base.metadata.create_all(bind=engine)
+        if settings.seed_data:
+            from .seed import seed_if_empty
+
+            seed_if_empty()
     logger.info("%s v%s started.", settings.app_name, settings.app_version)
     yield
 
