@@ -92,10 +92,21 @@ export const IconAlert = (p) => (
   </svg>
 );
 
+// Indian Rupee glyph rendered as text so it reads unambiguously as ₹.
 export const IconRevenue = (p) => (
   <svg {...base} {...p}>
-    <line x1="12" y1="1" x2="12" y2="23" />
-    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+    <text
+      x="12"
+      y="18"
+      textAnchor="middle"
+      fontSize="20"
+      fontWeight="700"
+      fontFamily="system-ui, sans-serif"
+      fill="currentColor"
+      stroke="none"
+    >
+      ₹
+    </text>
   </svg>
 );
 
@@ -110,5 +121,65 @@ export const IconRefresh = (p) => (
   <svg {...base} {...p}>
     <path d="M23 4v6h-6M1 20v-6h6" />
     <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+  </svg>
+);
+
+export const IconSun = (p) => (
+  <svg {...base} {...p}>
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+  </svg>
+);
+
+export const IconMoon = (p) => (
+  <svg {...base} {...p}>
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+  </svg>
+);
+
+export const IconSort = (p) => (
+  <svg {...base} {...p}>
+    <path d="M8 9l4-5 4 5M8 15l4 5 4-5" />
+  </svg>
+);
+
+export const IconChevronRight = (p) => (
+  <svg {...base} {...p}>
+    <path d="M9 18l6-6-6-6" />
+  </svg>
+);
+
+export const IconTrendingUp = (p) => (
+  <svg {...base} {...p}>
+    <path d="M23 6l-9.5 9.5-5-5L1 18" />
+    <path d="M17 6h6v6" />
+  </svg>
+);
+
+export const IconActivity = (p) => (
+  <svg {...base} {...p}>
+    <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+  </svg>
+);
+
+export const IconLayers = (p) => (
+  <svg {...base} {...p}>
+    <path d="M12 2 2 7l10 5 10-5-10-5z" />
+    <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
+  </svg>
+);
+
+export const IconWallet = (p) => (
+  <svg {...base} {...p}>
+    <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4" />
+    <path d="M3 5v14a2 2 0 0 0 2 2h16v-5" />
+    <path d="M18 12a2 2 0 0 0 0 4h4v-4z" />
+  </svg>
+);
+
+export const IconCheckCircle = (p) => (
+  <svg {...base} {...p}>
+    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+    <path d="M22 4 12 14.01l-3-3" />
   </svg>
 );

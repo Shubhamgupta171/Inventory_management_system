@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext.jsx";
 import {
   IconBox,
   IconCart,
+  IconChevronRight,
   IconDashboard,
   IconMenu,
   IconClose,
+  IconMoon,
+  IconSun,
   IconUsers,
 } from "./icons.jsx";
 
@@ -26,11 +30,11 @@ const TITLES = {
 export default function Layout({ children }) {
   const [open, setOpen] = useState(false);
   const location = useLocation();
+  const { theme, toggle } = useTheme();
   const title = TITLES[location.pathname] || "Inventory";
 
   return (
     <div className="app-shell">
-      {/* Mobile overlay */}
       <div
         className={`overlay ${open ? "overlay--show" : ""}`}
         onClick={() => setOpen(false)}
@@ -55,6 +59,7 @@ export default function Layout({ children }) {
         </div>
 
         <nav className="nav">
+          <div className="nav__section">Manage</div>
           {NAV.map(({ to, label, icon: Icon, end }) => (
             <NavLink
               key={to}
@@ -85,9 +90,24 @@ export default function Layout({ children }) {
           >
             <IconMenu />
           </button>
-          <h1 className="topbar__title">{title}</h1>
+          <div className="topbar__crumb">
+            <span>StockFlow</span>
+            <IconChevronRight width={14} height={14} />
+            <span className="topbar__title">{title}</span>
+          </div>
+          <div className="topbar__spacer" />
+          <button
+            className="icon-btn icon-btn--bordered"
+            onClick={toggle}
+            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+            title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+          >
+            {theme === "dark" ? <IconSun width={18} height={18} /> : <IconMoon width={18} height={18} />}
+          </button>
         </header>
-        <main className="content">{children}</main>
+        <main className="content" key={location.pathname}>
+          {children}
+        </main>
       </div>
     </div>
   );

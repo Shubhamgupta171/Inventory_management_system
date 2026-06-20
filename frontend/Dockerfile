@@ -28,7 +28,10 @@ COPY --from=build /app/dist /usr/share/nginx/html
 
 EXPOSE 80
 
+# Use 127.0.0.1 (not "localhost") — BusyBox wget resolves localhost to IPv6
+# ::1 first, but nginx listens on IPv4 0.0.0.0:80, which would 'connection
+# refused'. Hits the lightweight /healthz route from nginx.conf.
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=5 \
-    CMD wget -qO- http://localhost:80/ >/dev/null 2>&1 || exit 1
+    CMD wget -q -O /dev/null http://127.0.0.1:80/healthz || exit 1
 
 CMD ["nginx", "-g", "daemon off;"]
